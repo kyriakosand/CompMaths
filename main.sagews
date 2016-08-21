@@ -8,13 +8,11 @@ lwe =Regev(n=n,m=m)
 L = [lwe() for _ in range(m)]
 s=vector(np.random.random_integers(0,q-1,n))
 
-s #idiotiko kleidi
+print "Private key is ",s               #private key
 
-#q=17
-#n=4
-#m=5
-#a=1.3794007834502475
-
+pkVectors = matrix(m,n);
+for i in range(m):
+    pkVectors[i] = vector(np.random.random_integers(0,q-1,n)) #those are the public key vectors
 
 
 
