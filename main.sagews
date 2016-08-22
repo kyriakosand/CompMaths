@@ -1,4 +1,5 @@
 from sage.crypto.lwe import Regev
+from sage.stats.distributions.discrete_gaussian_integer import DiscreteGaussianDistributionIntegerSampler
 import numpy as np
 n = 4
 m = 5
@@ -10,14 +11,9 @@ s=vector(np.random.random_integers(0,q-1,n))
 
 print "Private key is ",s               #private key
 
-pkVectors = matrix(m,n);
+pkVectors = matrix(m,n)
 for i in range(m):
     pkVectors[i] = vector(np.random.random_integers(0,q-1,n)) #those are the public key vectors
-
-
-
-
-
-
-
-
+sigma = a*q    #standard deviation  is a*q
+D = DiscreteGaussianDistributionIntegerSampler(sigma=sigma)
+e = [Mod(D(),q) for _ in xrange(m)]    #error offsets
