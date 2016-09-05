@@ -29,3 +29,35 @@ for i in range(m):
             PK[i,j] = a[i,j]
     PK[i,n] = Mod(Mod(a[i].inner_product(s),p)+e[i],p)
 print "Public Key is: ",PK
+#random size of random set S
+Ssize=int(random()*(m+1))
+print "The number of elements of random set S is: ",Ssize
+
+#1st element is entered in S without similarity check.The following elements are being checked if they already exist in S.
+sim=0
+S=matrix(Ssize,n+1)
+for i in range(Ssize):
+	for l in range(n+1):
+		if i==0
+			j=int(random()*(m+1))
+			S[i,l]=PK[j,l]
+		else
+			j=int(random()*(m+1))
+			#similarity check
+			for k range(i):
+				if PK[j,l]==S[k,l]
+					sim=1
+			if sim==0
+				S[i,l]=PK[j,l]
+		sim=0
+
+
+print "Random Set is: ",S
+
+EncryptedMessage=matrix(Ssize,2)
+for i in range(Nn):
+	if Message(i)==0
+		for j in range(Ssize):
+			for k in range(2):
+				if k==0
+					EncryptedMessage[j,k]=
