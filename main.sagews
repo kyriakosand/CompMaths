@@ -36,7 +36,7 @@ print "Public Key is: ",PK
 Ssize=int(random()*(m+1))
 print "The number of elements of random set S is: ",Ssize
 
-#1st element is entered in S without similarity check.The following elements are being checked if they already exist in S.
+#random rows of Public Key are entered in S.
 S=matrix(Ssize,n+1)
 counter=[0 for i in range(m+1)]
 for i in range(Ssize):
@@ -45,7 +45,6 @@ for i in range(Ssize):
 	if counter[rand]<2:
 		for l in range(n+1):
 			S[i,l]=PK[rand,l]
-
 print "Random Set is: ",S
 
 Message=[0,1,1,0,1,0,1,1,0,0]
