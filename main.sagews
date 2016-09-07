@@ -23,7 +23,7 @@ for i in range(m):
 sigma = a_error*p                                     #standard deviation  is a*q
 D = DiscreteGaussianDistributionIntegerSampler(sigma=sigma) #the Ψa(n) distribution 
 e = [Mod(D(),p) for _ in xrange(m)]     #error offsets
-PK = matrix(m+1,n+1)                      #last column will be the b
+PK = matrix(m,n+1)                      #last column will be the b
 for i in range(m):
     for j in range(n):
             PK[i,j] = a[i,j]
@@ -38,9 +38,9 @@ print "The number of elements of random set S is: ",Ssize
 
 #random rows of Public Key are entered in S.
 S=matrix(Ssize,n+1)
-counter=[0 for i in range(m+1)]
+counter=[0 for i in range(m)]
 for i in range(Ssize):
-	rand=int(random()*(m+1))
+	rand=int(random()*(m))
 	counter[rand]+=1
 	if counter[rand]<2:
 		for l in range(n+1):
