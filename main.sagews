@@ -31,27 +31,6 @@ for i in range(m):
 print "Public Key is: ",PK
 
 #ENCRYPTION--------------------------------------------
-
-#Random size of random set S
-Ssize=int(random()*(m+1))
-print "The number of elements of random set S is: ",Ssize
-
-#Random Set S initilization
-S=matrix(Ssize,n+1)
-
-#This list counts the times a random row of Public Key is chosen to be entered in S.
-counter=[0 for i in range(m)]
-
-#Random rows of Public Key are entered in S.
-for i in range(Ssize):
-    rand=int(random()*(m))
-    counter[rand]+=1
-    #No duplicate rows
-    if counter[rand]<2:
-    	for l in range(n+1):
-    	    S[i,l]=PK[rand,l]
-print "Random Set is: ",S
-
 #A message in binary
 Message=[0,1,1,0,1,0,1,1,0,0]
 Messagelength=10
@@ -61,16 +40,36 @@ EncryptedMessage=matrix(Messagelength,2)
 
 #Encryption Proccess
 for i in range(Messagelength):
-    for j in range(Ssize):
-        for k in range(n):
-            #In the first column of EncryptedMessage, the sum of A parameters of S is entered.
+    #Random size of random set S
+    Ssize=int(random()*(m+1))
+    print "The number of elements of random set S is: ",Ssize
+
+    #Random Set S initilization
+    S=matrix(Ssize,n+1)
+
+    #This list counts the times a random row of Public Key is chosen to be entered in S.
+    counter=[0 for i in range(m)]
+
+    #Random rows of Public Key are entered in S.
+    for i in range(Ssize):
+        rand=int(random()*(m))
+        counter[rand]+=1
+        #No duplicate rows
+        if counter[rand]<2:
+    	    for l in range(n+1):
+    	        S[i,l]=PK[rand,l]
+    print "Random Set is: ",S
+
+    for k in range(n):
+        for j in range(Ssize):
+            #In the first column of EncryptedMessage, the sum of A parameters of each of column of S is entered.
             EncryptedMessage[i,0]+=S[j,k] 
-            
+        EncryptedMessage[i,0]=Mod(EncryptedMessage[i,0],p)
         if Message[i]==0:
             #If the bit is 0, we enter in the second column of EncryptedMessage the sum of B of S.
             EncryptedMessage[i,1]+=S[j,n]
         else:
             #If the bit is 1, we enter in the second column of EncryptedMessage the sum of the floor of p/2 plus Β of S.
             EncryptedMessage[i,1]+=S[j,n]+floor(p/2)
-            
+        EncryptedMessage[i,1]=Mod(EncryptedMessage[i,1],p)
 print EncryptedMessage
