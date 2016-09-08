@@ -48,16 +48,16 @@ for i in range(Messagelength):
     S=matrix(Ssize,n+1)
 
     #This list counts the times a random row of Public Key is chosen to be entered in S.
-    counter=[0 for i in range(m)]
+    counter=[0 for ci in range(m)]
 
     #Random rows of Public Key are entered in S.
-    for i in range(Ssize):
+    for ci in range(Ssize):
         rand=int(random()*(m))
         counter[rand]+=1
         #No duplicate rows
         if counter[rand]<2:
     	    for l in range(n+1):
-    	        S[i,l]=PK[rand,l]
+    	        S[ci,l]=PK[rand,l]
     print "Random Set is: ",S
 
     for k in range(n):
