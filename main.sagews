@@ -42,7 +42,7 @@ EncryptedMessage=matrix(Messagelength,2)
 for i in range(Messagelength):
     #Random size of random set S
     Ssize=int(random()*(m+1))
-    print "The number of elements of random set S is of ",i" bit: ",Ssize
+    print "The number of elements of random set S of %d bit is:"%i,Ssize
 
     #Random Set S initilization
     S=matrix(Ssize,n+1)
