@@ -42,7 +42,7 @@ EncryptedMessage=matrix(Messagelength,2)
 for i in range(Messagelength):
     #Random size of random set S
     Ssize=int(random()*(m+1))
-    print "The number of elements of random set S is: ",Ssize
+    print "The number of elements of random set S is of ",i" bit: ",Ssize
 
     #Random Set S initilization
     S=matrix(Ssize,n+1)
@@ -64,6 +64,7 @@ for i in range(Messagelength):
         for j in range(Ssize):
             #In the first column of EncryptedMessage, the sum of A parameters of each of column of S is entered.
             EncryptedMessage[i,0]+=S[j,k] 
+        #The sum is mod p
         EncryptedMessage[i,0]=Mod(EncryptedMessage[i,0],p)
         if Message[i]==0:
             #If the bit is 0, we enter in the second column of EncryptedMessage the sum of B of S.
@@ -71,5 +72,6 @@ for i in range(Messagelength):
         else:
             #If the bit is 1, we enter in the second column of EncryptedMessage the sum of the floor of p/2 plus Β of S.
             EncryptedMessage[i,1]+=S[j,n]+floor(p/2)
+        #The sum is mod p
         EncryptedMessage[i,1]=Mod(EncryptedMessage[i,1],p)
 print EncryptedMessage
