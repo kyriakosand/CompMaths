@@ -31,6 +31,7 @@ for i in range(m):
 print "Public Key is: ",PK
 
 #ENCRYPTION--------------------------------------------
+As2Bi=[
 #A message in binary
 Message=[0,1,1,0,1,0,1,1,0,0]
 Messagelength=10
