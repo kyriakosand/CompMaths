@@ -90,3 +90,36 @@ for i in range(Messagelength):
         EncryptedMessage[i,n]=Mod(sumOfB+floor(p/2),p)
     print EncryptedMessage
 
+#DECRYPTION--------------------------------------------------------------------------------------------------------------------------------------------------
+#(c1,c2) is the encrypted pair, c1 is a vector and c2 is a value
+
+c1 = matrix(Messagelength,n)  #initialization as matrix because there are many pairs
+for i in range(Messagelength): #initialization
+    c1[i] = vector(np.random.random_integers(0,p-1,n))  #initialization
+
+c2=vector(np.random.random_integers(0,p-1,Messagelength)) #initialization as vector because there are many pairs
+
+for i in range(Messagelength):
+    for j in range(n):
+            c1[i,j] = EncryptedMessage[i,j]  #we choose a from EncryptedMessage[a,b]
+for i in range(Messagelength):
+    c2[i] = EncryptedMessage[i,n]     #we choose b from EncryptedMessage[a,b]
+    
+
+dm= vector(QQ,Messagelength) #decrypted message
+#in modulo p if a value is closer to p than to p/2 then it is closer to 0 than p/2
+#this means that if a value belongs between p/4 and 3p/4 then it is closer to p/2 than 0
+#  0____p/4____p/2____3p/4____p
+for i in range(Messagelength):
+    #print floor(p/4),Mod(c2[i]-c1[i].inner_product(s),p), floor(3*p/4)        #this line prints p/4, value, 3p/4. If the value belongs in between then it is converted to 1        
+    if Mod(c2[i]-c1[i].inner_product(s),p)<floor(p/4):                 #determine if value is closer to zero
+        dm[i]= 0 
+    elif Mod(c2[i]-c1[i].inner_product(s),p)>floor(3*p/4):             #determine if value is closer to p, thus to 0
+        dm[i]=0
+    elif Mod(c2[i]-c1[i].inner_product(s),p)==floor(3*p/4):            # if it is equal to 3p/4 we convert it to 0
+        dm[i]=0
+    elif Mod(c2[i]-c1[i].inner_product(s),p)==floor(p/4):              # if it is equal to p/4 we convert it to 1
+        dm[i]= 1
+    else:                                                              # value belongs in between p/4 and 3p/4
+        dm[i]= 1
+print "Decrypted Message is: ",dm
