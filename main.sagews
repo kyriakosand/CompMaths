@@ -1,12 +1,21 @@
 from sage.stats.distributions.discrete_gaussian_integer import DiscreteGaussianDistributionIntegerSampler
 import numpy as np
 import warnings
+import random
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 #---------------------initialization------------------------------
 n = 50
-p = next_prime(n^2)
+primes=[]
+for num in range(n^2,2*n^2):
+    for i in range(2,num):
+        if (num % i) == 0:
+            break
+        else:
+            primes.append(num)
+primesNonDuplicates = list(set(primes))
+p = random.choice(primesNonDuplicates)
 print "Modulo p is ",p
 e_arbitrary = 5           #can be anything, it's arbitrary
 m = floor(((1+e_arbitrary)*(n+1)*log(p)).n())
@@ -15,7 +24,7 @@ a_error = (1/(sqrt(n)*(log(n)^2))).n()
 #-------------------private key construction-----------------------
 s=vector(np.random.random_integers(0,p-1,n))
 
-print "Private key is ",s
+#print "Private key is ",s
 
 #--------------------public key contruction---------------------------------
 a = matrix(m,n)
@@ -29,7 +38,7 @@ for i in range(m):
     for j in range(n):
             PK[i,j] = a[i,j]
     PK[i,n] = Mod(Mod(a[i].inner_product(s),p)+e[i],p)
-print "Public Key is: ",PK
+#print "Public Key is: ",PK
 
 #ENCRYPTION--------------------------------------------
 Keyboard=[' ','!','"','#','$']
@@ -44,7 +53,7 @@ for i in range(len(test)):
 print test
     
 #A message in binary
-Message=[0,1,1,0,1,0,1,1,0,0]   
+Message=[1,1,1,1,1,1,1,1,1,1]
 Messagelength=10
 
 #EncryptedMessage matrix initialization
@@ -53,7 +62,7 @@ EncryptedMessage=matrix(Messagelength,n+1)
 #Encryption Proccess
 for i in range(Messagelength):
     #Random size of random set S
-    Ssize=int(random()*(m+1))
+    Ssize=int(random.random()*(m+1))
 
     #Random Set S initilization
     S=matrix(Ssize,n+1)
@@ -63,29 +72,19 @@ for i in range(Messagelength):
 
     #Random rows of Public Key are entered in S.
     for ci in range(Ssize):
-        rand=int(random()*(m))
+        rand=int(random.random()*(m))
         counter[rand]+=1
         #No duplicate rows
         if counter[rand]<2:
     	    for l in range(n+1):
     	        S[ci,l]=PK[rand,l]
-    sumOfB=0    #this is the variable that will hold the sum of b,of last column
     for k in range(n+1):
         for j in range(Ssize):
             #In each column of EncryptedMessage, the sum of A parameters of each of column of S is entered,except for the last one
-            if(k<n):
-                EncryptedMessage[i,k]+=S[j,k]
-            else:
-                sumOfB +=S[j,k]
-        #The sum is mod p
-        EncryptedMessage[i,k]=Mod(EncryptedMessage[i,k],p)
-    if Message[i]==0:
-        #If the bit is 0, we enter in the second column of EncryptedMessage the sum of B of S.
-        EncryptedMessage[i,n]=Mod(sumOfB,p)
-    else:
-        #If the bit is 1, we enter in the second column of EncryptedMessage the sum of the floor of p/2 plus Β of S.
-        EncryptedMessage[i,n]=Mod(sumOfB+floor(p/2),p)
-
+                EncryptedMessage[i,k]+=Mod(S[j,k],p)
+    if Message[i]==1:
+        EncryptedMessage[i,n]=Mod(EncryptedMessage[i,n]+floor(p/2),p)
+    
 #DECRYPTION--------------------------------------------------------------------------------------------------------------------------------------------------
 #(c1,c2) is the encrypted pair, c1 is a vector and c2 is a value
 
@@ -119,3 +118,4 @@ for i in range(Messagelength):
     elif (number == p-number):
         dm[i] = 0
 print "Decrypted Message is: ",dm
+print "Original Message is: ",Message
