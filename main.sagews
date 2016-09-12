@@ -5,7 +5,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 #---------------------initialization------------------------------
-n = 3
+n = 50
 p = next_prime(n^2)
 print "Modulo p is ",p
 e_arbitrary = 5           #can be anything, it's arbitrary
@@ -44,7 +44,7 @@ for i in range(len(test)):
 print test
     
 #A message in binary
-Message=[0,1,1,0,1,0,1,1,0,0]
+Message=[0,1,1,0,1,0,1,1,0,0]   
 Messagelength=10
 
 #EncryptedMessage matrix initialization
@@ -54,7 +54,6 @@ EncryptedMessage=matrix(Messagelength,n+1)
 for i in range(Messagelength):
     #Random size of random set S
     Ssize=int(random()*(m+1))
-    print "The number of elements of random set S of %d bit is:"%i,Ssize
 
     #Random Set S initilization
     S=matrix(Ssize,n+1)
@@ -70,8 +69,6 @@ for i in range(Messagelength):
         if counter[rand]<2:
     	    for l in range(n+1):
     	        S[ci,l]=PK[rand,l]
-    print "Random Set is: ",S
-    print "----------------------"
     sumOfB=0    #this is the variable that will hold the sum of b,of last column
     for k in range(n+1):
         for j in range(Ssize):
@@ -88,7 +85,6 @@ for i in range(Messagelength):
     else:
         #If the bit is 1, we enter in the second column of EncryptedMessage the sum of the floor of p/2 plus Β of S.
         EncryptedMessage[i,n]=Mod(sumOfB+floor(p/2),p)
-    print EncryptedMessage
 
 #DECRYPTION--------------------------------------------------------------------------------------------------------------------------------------------------
 #(c1,c2) is the encrypted pair, c1 is a vector and c2 is a value
@@ -107,19 +103,19 @@ for i in range(Messagelength):
     
 
 dm= vector(QQ,Messagelength) #decrypted message
-#in modulo p if a value is closer to p than to p/2 then it is closer to 0 than p/2
-#this means that if a value belongs between p/4 and 3p/4 then it is closer to p/2 than 0
-#  0____p/4____p/2____3p/4____p
 for i in range(Messagelength):
-    #print floor(p/4),Mod(c2[i]-c1[i].inner_product(s),p), floor(3*p/4)        #this line prints p/4, value, 3p/4. If the value belongs in between then it is converted to 1        
-    if Mod(c2[i]-c1[i].inner_product(s),p)<floor(p/4):                 #determine if value is closer to zero
-        dm[i]= 0 
-    elif Mod(c2[i]-c1[i].inner_product(s),p)>floor(3*p/4):             #determine if value is closer to p, thus to 0
-        dm[i]=0
-    elif Mod(c2[i]-c1[i].inner_product(s),p)==floor(3*p/4):            # if it is equal to 3p/4 we convert it to 0
-        dm[i]=0
-    elif Mod(c2[i]-c1[i].inner_product(s),p)==floor(p/4):              # if it is equal to p/4 we convert it to 1
-        dm[i]= 1
-    else:                                                              # value belongs in between p/4 and 3p/4
-        dm[i]= 1
+    number = Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)
+    diffFromMiddle = number-floor(p/2)            #this returns the substraction modulo p!!!!e.g. for p=11 and number=2, 2-5=-3mod11=8, real distance=11-8=3
+    if(number<p-number):                 
+        if(number < p-diffFromMiddle):   #p-diffFromMiddle is to calculate the real distance from floor(p/2)
+            dm[i] = 0
+        else:
+            dm[i] = 1
+    elif (number>p-number):
+        if(number<diffFromMiddle):
+            dm[i]=0
+        else:
+            dm[i]=1
+    elif (number == p-number):
+        dm[i] = 0
 print "Decrypted Message is: ",dm
