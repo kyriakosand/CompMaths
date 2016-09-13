@@ -6,7 +6,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 #---------------------initialization------------------------------
-n = 50
+n = 10
 primes=[]
 for num in range(n^2,2*n^2):
     for i in range(2,num):
@@ -17,7 +17,7 @@ for num in range(n^2,2*n^2):
 primesNonDuplicates = list(set(primes))
 p = random.choice(primesNonDuplicates)
 print "Modulo p is ",p
-e_arbitrary = 5           #can be anything, it's arbitrary
+e_arbitrary = 50           #can be anything, it's arbitrary
 m = floor(((1+e_arbitrary)*(n+1)*log(p)).n())
 a_error = (1/(sqrt(n)*(log(n)^2))).n()
 
@@ -62,7 +62,7 @@ EncryptedMessage=matrix(Messagelength,n+1)
 #Encryption Proccess
 for i in range(Messagelength):
     #Random size of random set S
-    Ssize=int(random.random()*(m+1))
+    Ssize= int(random.uniform(1,m+1))
 
     #Random Set S initilization
     S=matrix(Ssize,n+1)
@@ -89,16 +89,12 @@ for i in range(Messagelength):
 #(c1,c2) is the encrypted pair, c1 is a vector and c2 is a value
 
 c1 = matrix(Messagelength,n)  #initialization as matrix because there are many pairs
-for i in range(Messagelength): #initialization
-    c1[i] = vector(np.random.random_integers(0,p-1,n))  #initialization
-
-c2=vector(np.random.random_integers(0,p-1,Messagelength)) #initialization as vector because there are many pairs
+c2 = []
 
 for i in range(Messagelength):
     for j in range(n):
             c1[i,j] = EncryptedMessage[i,j]  #we choose a from EncryptedMessage[a,b]
-for i in range(Messagelength):
-    c2[i] = EncryptedMessage[i,n]     #we choose b from EncryptedMessage[a,b]
+    c2.append(EncryptedMessage[i,n])     #we choose b from EncryptedMessage[a,b]
     
 
 dm= vector(QQ,Messagelength) #decrypted message
