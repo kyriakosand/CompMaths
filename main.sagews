@@ -41,20 +41,10 @@ for i in range(m):
 #print "Public Key is: ",PK
 
 #ENCRYPTION--------------------------------------------
-Keyboard=[' ','!','"','#','$']
-BinaryKeyboard=["00100000","00100001","00100010","00100011","00100100"]
-
-test="!"
-index=0
-for i in range(len(test)):
-    if(test[i]==Keyboard[i]):
-        index=i
-    test=Keyboard[index]
-print test
-    
-#A message in binary
-Message=[1,1,1,1,1,1,1,1,1,1]
-Messagelength=10
+#Message to binary
+Amessage="A message"
+Message=' '.join(format(ord(x), 'b') for x in Amessage)
+Messagelength=len(Message)
 
 #EncryptedMessage matrix initialization
 EncryptedMessage=matrix(Messagelength,n+1)
