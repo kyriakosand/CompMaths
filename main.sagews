@@ -6,7 +6,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 #---------------------initialization------------------------------
-n = 10
+n = 130
 primes=[]
 for num in range(n^2,2*n^2):
     for i in range(2,num):
@@ -17,7 +17,7 @@ for num in range(n^2,2*n^2):
 primesNonDuplicates = list(set(primes))
 p = random.choice(primesNonDuplicates)
 print "Modulo p is ",p
-e_arbitrary = 50           #can be anything, it's arbitrary
+e_arbitrary = 5           #can be anything, it's arbitrary
 m = floor(((1+e_arbitrary)*(n+1)*log(p)).n())
 a_error = (1/(sqrt(n)*(log(n)^2))).n()
 
@@ -39,11 +39,11 @@ for i in range(m):
             PK[i,j] = a[i,j]
     PK[i,n] = Mod(Mod(a[i].inner_product(s),p)+e[i],p)
 #print "Public Key is: ",PK
-
 #ENCRYPTION--------------------------------------------
 #Message to binary
-Amessage="A message"
+Amessage="A"
 Message=' '.join(format(ord(x), 'b') for x in Amessage)
+
 Messagelength=len(Message)
 
 #EncryptedMessage matrix initialization
@@ -88,20 +88,24 @@ for i in range(Messagelength):
     
 
 dm= vector(QQ,Messagelength) #decrypted message
+#in modulo p if a value is closer to p than to p/2 then it is closer to 0 than p/2
+#this means that if a value belongs between p/4 and 3p/4 then it is closer to p/2 than 0
+#  0____p/4____p/2____3p/4____p
 for i in range(Messagelength):
-    number = Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)
-    diffFromMiddle = number-floor(p/2)            #this returns the substraction modulo p!!!!e.g. for p=11 and number=2, 2-5=-3mod11=8, real distance=11-8=3
-    if(number<p-number):                 
-        if(number < p-diffFromMiddle):   #p-diffFromMiddle is to calculate the real distance from floor(p/2)
-            dm[i] = 0
-        else:
-            dm[i] = 1
-    elif (number>p-number):
-        if(number<diffFromMiddle):
-            dm[i]=0
-        else:
+    print floor(p/4),Mod(c2[i]-c1[i].inner_product(s),p), floor(3*p/4)        #this line prints p/4, value, 3p/4. If the value belongs in between then it is converted to 1        
+    if Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)<floor(p/4):                 #determine if value is closer to zero
+        dm[i]= 0 
+    elif Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)>floor(3*p/4):             #determine if value is closer to p, thus to 0
+        dm[i]=0
+    elif Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)>floor(p/4):
+        if Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)<floor(3*p/4):
             dm[i]=1
-    elif (number == p-number):
-        dm[i] = 0
+    elif Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)<floor(3*p/4):
+        if Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)>floor(p/4):
+            dm[i]=1
+    elif Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)==floor(3*p/4):
+        dm[i]=1
+    elif Mod(c2[i]-Mod(c1[i].inner_product(s),p),p)==floor(p/4):
+        dm[i]=1
 print "Decrypted Message is: ",dm
 print "Original Message is: ",Message
