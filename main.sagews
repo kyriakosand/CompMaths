@@ -3,7 +3,7 @@ import numpy as np
 import warnings
 import random
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-
+sage_server.MAX_STDOUT_SIZE=50000
 
 #---------------------initialization------------------------------
 n = 130
